@@ -23,6 +23,7 @@ router.get('/upload', function(req, res) {
 router.post('/post', function(req, res) {
     postData = req.body
     console.log(postData)
+    console.log(postData.form_response.answers)
     res.json(req.body)
 })
 
