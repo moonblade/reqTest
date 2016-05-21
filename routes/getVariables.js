@@ -1,5 +1,5 @@
 var BigM = require('../routes/BigM')
-var jsPDF = require('jspdf')
+// var jsPDF = require('jspdf')
 var getVariables = function(postVariables) {
     var $scope = {}
     var userId = Math.round(Math.random() * 1000000000);
@@ -585,8 +585,8 @@ var getVariables = function(postVariables) {
             "\nChildren Education fees sponsorship," + $scope.variables.cea.value +
             "\nVacation Travelling Fare sponsorship," + $scope.variables.lta.value +
             "\nConveyance Allowance," + $scope.variables.ca.value +
-            "\nProvident fund(PF)," + $scope.variables.pfesi.value > 0 ? $scope.variables.pfesi.pfvalue : 0 +
-            "\nEmployee State Insurance (ESI)," + $scope.variables.pfesi.value > 0 ? $scope.variables.pfesi.esivalue : 0 +
+            "\nProvident fund(PF)," + ($scope.variables.pfesi.value > 0 ? $scope.variables.pfesi.pfvalue : 0) +
+            "\nEmployee State Insurance (ESI)," + ($scope.variables.pfesi.value > 0 ? $scope.variables.pfesi.esivalue : 0) +
             "\nDearness Allowance," + $scope.variables.da.value +
             "\nHouse Rent Allowance," + $scope.variables.x2.value +
             "\nVariable Income (sales incentive)," + $scope.variables.fc.value +
@@ -615,23 +615,13 @@ var getVariables = function(postVariables) {
             "\n\n\nTax Hero OPC" +
             "\nCopyright Reserved 2016";
 
-        $('<a></a>')
-            .attr('href', 'data:application/csv;charset=utf8,' + encodeURIComponent(data))
-            .attr('download', 'Instant Tax Saver Report.csv')
-            .attr('id', 'downloadFile')
-            .html('')
-            .appendTo('body');
-
-        $('#downloadFile').ready(function() {
-            $('#downloadFile')
-                .get(0)
-                .click();
-            $('#downloadFile').remove()
-        });
+        return data;
 
     }
 
     $scope.downloadPDF = function() {
+        /*Delete this*/
+        return "This is the pdf, deal with it";
         var columns = [{
             title: "Income Description",
             dataKey: "income"
@@ -658,7 +648,6 @@ var getVariables = function(postVariables) {
             ["Tax Due", $scope.variables.tax.value],
             ["Total Tax savings", $scope.variables.saveTax.value]
         ];
-
         var rows = []
         data.forEach(function(d) {
             rows.push({
@@ -737,7 +726,13 @@ var getVariables = function(postVariables) {
         return doc;
         // doc.save('Instant Tax Saver Report.pdf');
     }
-    return $scope.downloadPDF();
+
+    // Make download pdf and csv correct and then return the pdf
+    return {
+        "csv":$scope.downloadCSV(),
+        "pdf":$scope.downloadPDF()
+    }
+    // return $scope.downloadPDF();
 }
 
 module.exports = getVariables;
